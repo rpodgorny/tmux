@@ -914,6 +914,8 @@ struct window_pane {
 	const struct window_mode *mode;
 	void		*modedata;
 
+	int status;
+
 	TAILQ_ENTRY(window_pane) entry;
 	RB_ENTRY(window_pane) tree_entry;
 };

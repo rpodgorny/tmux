@@ -18,6 +18,7 @@
 
 #include <sys/types.h>
 #include <sys/param.h>
+#include <sys/wait.h>
 
 #include <ctype.h>
 #include <errno.h>
@@ -606,6 +607,9 @@ format_window_pane(struct format_tree *ft, struct window_pane *wp)
 	format_add(ft, "pane_id", "%%%u", wp->id);
 	format_add(ft, "pane_active", "%d", wp == wp->window->active);
 	format_add(ft, "pane_dead", "%d", wp->fd == -1);
+	if (wp->fd == -1 && WIFEXITED(wp->status)) {
+		format_add(ft, "pane_dead_status", "%d", WEXITSTATUS(wp->status));
+	}
 	format_add(ft, "pane_input_off", "%d", !!(wp->flags & PANE_INPUTOFF));
 
 	if (window_pane_visible(wp)) {
